@@ -632,7 +632,7 @@ export function getMoveFailureMessage(reason: MoveFailureReason): string {
     case 'no-piece-at-source':
       return 'There is no piece at the selected source position.';
     case 'wrong-turn':
-      return 'It is not that piece’s turn.';
+      return "It is not that piece's turn.";
     case 'illegal-move':
       return 'That move is not legal in the current position.';
     default:

@@ -1,24 +1,116 @@
-const folders = ['game', 'state', 'components', 'styles', 'tests'];
+type SidebarPanelProps = {
+  currentTurnLabel: string;
+  selectedSummary: string;
+  legalMoveCount: number;
+  moveCount: number;
+  statusMessage: string;
+  canUndo: boolean;
+  canClearSelection: boolean;
+  onUndo: () => void;
+  onNewGame: () => void;
+  onClearSelection: () => void;
+};
 
-export function SidebarPanel() {
+const LEGEND_ITEMS = [
+  {
+    className: 'legend-swatch--selected',
+    label: 'Selected piece',
+  },
+  {
+    className: 'legend-swatch--legal',
+    label: 'Legal move',
+  },
+  {
+    className: 'legend-swatch--capture',
+    label: 'Capture move',
+  },
+  {
+    className: 'legend-swatch--invalid',
+    label: 'Invalid click',
+  },
+];
+
+export function SidebarPanel({
+  currentTurnLabel,
+  selectedSummary,
+  legalMoveCount,
+  moveCount,
+  statusMessage,
+  canUndo,
+  canClearSelection,
+  onUndo,
+  onNewGame,
+  onClearSelection,
+}: SidebarPanelProps) {
   return (
     <aside className="panel sidebar-panel" aria-labelledby="sidebar-title">
-      <p className="eyebrow">State</p>
-      <h2 id="sidebar-title">Rules Engine Ready</h2>
-      <p className="sidebar-copy">
-        The repository now includes a standalone Janggi rules layer with typed game state,
-        legal move generation, validation, captures, turn flow, and undo-ready history.
-      </p>
+      <div className="panel-heading">
+        <p className="eyebrow">Match State</p>
+        <h2 id="sidebar-title" data-testid="turn-indicator">
+          {currentTurnLabel}
+        </h2>
+        <p className="sidebar-copy">
+          Pass-and-play Janggi with immediate move feedback, board-side controls, and visible turn
+          flow.
+        </p>
+      </div>
 
-      <ul className="folder-list">
-        {folders.map((folder) => (
-          <li key={folder}>{folder}</li>
-        ))}
-      </ul>
+      <div className="status-strip" role="status" aria-live="polite">
+        {statusMessage}
+      </div>
 
-      <section className="info-block" aria-labelledby="next-steps-title">
-        <h3 id="next-steps-title">Next gameplay slices</h3>
-        <p>Connect the engine to board interactions, legal move highlighting, and the help UI.</p>
+      <section className="sidebar-section" aria-labelledby="selection-title">
+        <h3 id="selection-title">Selection</h3>
+        <dl className="detail-list">
+          <div>
+            <dt>Active piece</dt>
+            <dd>{selectedSummary}</dd>
+          </div>
+          <div>
+            <dt>Legal targets</dt>
+            <dd>{legalMoveCount}</dd>
+          </div>
+          <div>
+            <dt>Moves played</dt>
+            <dd>{moveCount}</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section className="sidebar-section" aria-labelledby="controls-title">
+        <h3 id="controls-title">Controls</h3>
+        <div className="control-stack">
+          <button className="control-button" type="button" onClick={onUndo} disabled={!canUndo}>
+            Undo move
+          </button>
+          <button
+            className="control-button control-button--secondary"
+            type="button"
+            onClick={onClearSelection}
+            disabled={!canClearSelection}
+          >
+            Clear selection
+          </button>
+          <button
+            className="control-button control-button--secondary"
+            type="button"
+            onClick={onNewGame}
+          >
+            New game
+          </button>
+        </div>
+      </section>
+
+      <section className="sidebar-section" aria-labelledby="legend-title">
+        <h3 id="legend-title">Board legend</h3>
+        <ul className="legend-list">
+          {LEGEND_ITEMS.map((item) => (
+            <li key={item.label}>
+              <span className={`legend-swatch ${item.className}`} aria-hidden="true" />
+              <span>{item.label}</span>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <footer className="panel-footer">Built by Jakal Flow</footer>

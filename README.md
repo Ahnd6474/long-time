@@ -1,6 +1,6 @@
 # Long Time
 
-Long Time is a web-only Janggi project built with React, TypeScript, and Vite. The repository now includes a standalone rules engine with typed board state, initial setup, legal move generation, authoritative move validation, capture handling, turn flow, and undo-ready history, while keeping the gameplay logic separate from the UI shell.
+Long Time is a web-only Janggi project built with React, TypeScript, and Vite. The repository now includes a playable board UI backed by a standalone rules engine with typed board state, initial setup, legal move generation, authoritative move validation, capture handling, turn flow, and undo-ready history.
 
 Built by Jakal Flow.
 
@@ -46,8 +46,9 @@ tests/         repository-level pytest checks
 ## Current Feature Summary
 
 - Runnable Vite React TypeScript website from repository root
-- Web-only app shell with responsive layout
+- Responsive playable board with current-turn messaging and side controls
 - Standalone Janggi rules engine under `src/game`
 - Standard opening setup plus legal move generation for every piece
-- Move validation, capture handling, turn advancement, and undo-ready history
+- Selection-driven legal move highlighting, capture highlighting, invalid-click feedback, and local turn switching
+- Move validation, capture handling, turn advancement, undo, and new-game controls
 - Frontend Vitest coverage executed through the repository-level `python -m pytest` path
