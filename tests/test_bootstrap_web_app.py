@@ -47,3 +47,48 @@ def test_frontend_unit_suite_passes() -> None:
     )
 
     assert result.returncode == 0, f"{result.stdout}\n{result.stderr}"
+
+
+def test_readme_documents_current_run_and_usage_flow() -> None:
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+
+    expected_sections = [
+        "## Overview",
+        "## Stack",
+        "## Setup",
+        "## Run Locally",
+        "## Testing",
+        "## Project Structure",
+        "## Feature Summary",
+        "## Known Limitations",
+    ]
+    expected_snippets = [
+        "web app",
+        "npm install",
+        "npm run dev",
+        "npm run build",
+        "npm run preview",
+        "npm test",
+        "python -m pytest",
+        "src/components",
+        "src/game",
+        "src/state",
+        "src/styles",
+        "src/tests",
+        "tests/",
+        "local two-player",
+        "legal move",
+        "undo",
+        "reset board",
+        "new game",
+        "help modal",
+        "no AI opponent",
+        "no online play",
+        "checkmate",
+    ]
+
+    for section in expected_sections:
+        assert section in readme, f"README is missing section: {section}"
+
+    for snippet in expected_snippets:
+        assert snippet in readme, f"README is missing documented snippet: {snippet}"
