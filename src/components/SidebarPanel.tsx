@@ -5,10 +5,10 @@ type SidebarPanelProps = {
   moveCount: number;
   statusMessage: string;
   canUndo: boolean;
-  canClearSelection: boolean;
   onUndo: () => void;
+  onReset: () => void;
   onNewGame: () => void;
-  onClearSelection: () => void;
+  onOpenHelp: () => void;
 };
 
 const LEGEND_ITEMS = [
@@ -37,11 +37,39 @@ export function SidebarPanel({
   moveCount,
   statusMessage,
   canUndo,
-  canClearSelection,
   onUndo,
+  onReset,
   onNewGame,
-  onClearSelection,
+  onOpenHelp,
 }: SidebarPanelProps) {
+  const controlItems = [
+    {
+      label: 'Undo move',
+      hint: 'Step back one move.',
+      onClick: onUndo,
+      disabled: !canUndo,
+    },
+    {
+      label: 'Reset board',
+      hint: 'Restore this opening setup.',
+      onClick: onReset,
+      disabled: false,
+    },
+    {
+      label: 'New game',
+      hint: 'Start a fresh standard match.',
+      onClick: onNewGame,
+      disabled: false,
+    },
+    {
+      label: 'Help and manual',
+      hint: 'Open rules, controls, and limits.',
+      onClick: onOpenHelp,
+      disabled: false,
+      opensDialog: true,
+    },
+  ];
+
   return (
     <aside className="panel sidebar-panel" aria-labelledby="sidebar-title">
       <div className="panel-heading">
@@ -79,25 +107,23 @@ export function SidebarPanel({
 
       <section className="sidebar-section" aria-labelledby="controls-title">
         <h3 id="controls-title">Controls</h3>
-        <div className="control-stack">
-          <button className="control-button" type="button" onClick={onUndo} disabled={!canUndo}>
-            Undo move
-          </button>
-          <button
-            className="control-button control-button--secondary"
-            type="button"
-            onClick={onClearSelection}
-            disabled={!canClearSelection}
-          >
-            Clear selection
-          </button>
-          <button
-            className="control-button control-button--secondary"
-            type="button"
-            onClick={onNewGame}
-          >
-            New game
-          </button>
+        <p className="sidebar-copy">
+          Keep the match moving with direct board controls and the in-app rules guide.
+        </p>
+        <div className="control-grid">
+          {controlItems.map((item) => (
+            <button
+              key={item.label}
+              className={`control-button ${item.disabled ? '' : 'control-button--feature'}`}
+              type="button"
+              onClick={item.onClick}
+              disabled={item.disabled}
+              aria-haspopup={item.opensDialog ? 'dialog' : undefined}
+            >
+              <span className="control-button__label">{item.label}</span>
+              <span className="control-button__hint">{item.hint}</span>
+            </button>
+          ))}
         </div>
       </section>
 

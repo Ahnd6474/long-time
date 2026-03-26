@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { GameBoard } from './components/GameBoard';
+import { HelpModal } from './components/HelpModal';
 import { SidebarPanel } from './components/SidebarPanel';
 import { formatPieceLabel, formatPlayerColor } from './components/piecePresentation';
 import { cloneBoard, formatCellLabel, positionsEqual } from './game/board';
@@ -16,9 +17,7 @@ type AppProps = {
   initialState?: GameState;
 };
 
-function buildInitialState(sourceState?: GameState): GameState {
-  const baseState = sourceState ?? createInitialGameState();
-
+function cloneGameState(baseState: GameState): GameState {
   return {
     ...baseState,
     board: cloneBoard(baseState.board),
@@ -26,8 +25,18 @@ function buildInitialState(sourceState?: GameState): GameState {
   };
 }
 
-function buildOpeningMessage(currentTurn: PlayerColor): string {
-  return `${formatPlayerColor(currentTurn)} to move. Select a ${currentTurn} piece to see its legal moves.`;
+function buildScenarioState(sourceState?: GameState): GameState {
+  return cloneGameState(sourceState ?? createInitialGameState());
+}
+
+function buildStandardState(): GameState {
+  return cloneGameState(createInitialGameState());
+}
+
+function buildOpeningMessage(currentTurn: PlayerColor, prefix?: string): string {
+  const message = `${formatPlayerColor(currentTurn)} to move. Select a ${currentTurn} piece to see its legal moves.`;
+
+  return prefix ? `${prefix} ${message}` : message;
 }
 
 function formatCount(count: number, label: string): string {
@@ -35,9 +44,10 @@ function formatCount(count: number, label: string): string {
 }
 
 export default function App({ initialState }: AppProps) {
-  const [gameState, setGameState] = useState<GameState>(() => buildInitialState(initialState));
+  const [gameState, setGameState] = useState<GameState>(() => buildScenarioState(initialState));
   const [selectedPosition, setSelectedPosition] = useState<Position | null>(null);
   const [invalidPosition, setInvalidPosition] = useState<Position | null>(null);
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [statusMessage, setStatusMessage] = useState(
     buildOpeningMessage(initialState?.currentTurn ?? 'blue'),
   );
@@ -169,22 +179,23 @@ export default function App({ initialState }: AppProps) {
   }
 
   function handleNewGame() {
-    const nextState = buildInitialState(initialState);
+    const nextState = buildStandardState();
 
     setGameState(nextState);
     setSelectedPosition(null);
     setInvalidPosition(null);
-    setStatusMessage(buildOpeningMessage(nextState.currentTurn));
+    setStatusMessage(buildOpeningMessage(nextState.currentTurn, 'Fresh standard match ready.'));
   }
 
-  function handleClearSelection() {
-    if (!selectedPosition) {
-      return;
-    }
+  function handleReset() {
+    const nextState = buildScenarioState(initialState);
 
+    setGameState(nextState);
     setSelectedPosition(null);
     setInvalidPosition(null);
-    setStatusMessage(`Selection cleared. ${formatPlayerColor(gameState.currentTurn)} to move.`);
+    setStatusMessage(
+      buildOpeningMessage(nextState.currentTurn, 'Board reset to the opening setup for this match.'),
+    );
   }
 
   return (
@@ -230,12 +241,14 @@ export default function App({ initialState }: AppProps) {
           moveCount={gameState.moveHistory.length}
           statusMessage={statusMessage}
           canUndo={gameState.moveHistory.length > 0}
-          canClearSelection={selectedPosition !== null}
           onUndo={handleUndo}
+          onReset={handleReset}
           onNewGame={handleNewGame}
-          onClearSelection={handleClearSelection}
+          onOpenHelp={() => setIsHelpOpen(true)}
         />
       </main>
+
+      <HelpModal open={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
     </div>
   );
 }
