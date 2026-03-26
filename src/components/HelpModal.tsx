@@ -63,6 +63,24 @@ const LIMITATIONS = [
   'There is no saved match history, import/export, or annotated move list yet.',
 ];
 
+const HELP_SUMMARY_CARDS = [
+  {
+    label: 'Goal',
+    value: 'Capture the opposing general',
+    description: 'Matches end when one general is taken off the board.',
+  },
+  {
+    label: 'Opening',
+    value: 'Blue starts from the top',
+    description: 'Red responds from the bottom and players take alternating turns.',
+  },
+  {
+    label: 'Move signals',
+    value: 'Gold, teal, and coral markers',
+    description: 'Selected pieces, legal moves, and captures each get a distinct board cue.',
+  },
+];
+
 export function HelpModal({ open, onClose }: HelpModalProps) {
   useEffect(() => {
     if (!open) {
@@ -120,6 +138,16 @@ export function HelpModal({ open, onClose }: HelpModalProps) {
         </div>
 
         <div className="help-modal__body">
+          <div className="help-summary-grid" aria-label="Quick facts">
+            {HELP_SUMMARY_CARDS.map((card) => (
+              <article key={card.label} className="help-summary-card">
+                <p className="eyebrow">{card.label}</p>
+                <p className="help-summary-card__value">{card.value}</p>
+                <p>{card.description}</p>
+              </article>
+            ))}
+          </div>
+
           <section className="help-section" aria-labelledby="help-janggi-title">
             <h3 id="help-janggi-title">What is Janggi?</h3>
             <p>

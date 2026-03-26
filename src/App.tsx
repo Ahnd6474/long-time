@@ -17,6 +17,12 @@ type AppProps = {
   initialState?: GameState;
 };
 
+const PRODUCT_HIGHLIGHTS = [
+  'Legal move overlays',
+  'Clear turn guidance',
+  'Responsive board layout',
+];
+
 function cloneGameState(baseState: GameState): GameState {
   return {
     ...baseState,
@@ -59,6 +65,10 @@ export default function App({ initialState }: AppProps) {
     gameState.status === 'finished' && gameState.winner
       ? `${formatPlayerColor(gameState.winner)} wins`
       : `${formatPlayerColor(gameState.currentTurn)} to move`;
+  const selectedSummary =
+    selectedPiece && selectedPosition
+      ? `${formatPieceLabel(selectedPiece)} at ${formatCellLabel(selectedPosition)}`
+      : 'No piece selected';
 
   useEffect(() => {
     if (!invalidPosition) {
@@ -200,24 +210,56 @@ export default function App({ initialState }: AppProps) {
 
   return (
     <div className="app-shell">
-      <header className="hero">
+      <header className="hero" aria-labelledby="site-title">
         <div className="hero-copy-block">
-          <p className="eyebrow">Built by Jakal Flow</p>
-          <h1>Long Time</h1>
+          <div className="hero-brand-row">
+            <p className="eyebrow">Built by Jakal Flow</p>
+            <p className="hero-badge">Modern Janggi on the web</p>
+          </div>
+          <h1 id="site-title">Long Time</h1>
           <p className="hero-copy">
-            A polished browser Janggi board with legal move highlighting, capture feedback, and
-            local two-player flow.
+            A focused Janggi website with readable match flow, strong move-state cues, and a
+            built-in guide for local two-player sessions.
           </p>
+          <ul className="hero-feature-list" aria-label="Product highlights">
+            {PRODUCT_HIGHLIGHTS.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
         </div>
 
-        <div className="hero-status-card">
+        <section className="hero-status-card" aria-labelledby="match-overview-title">
           <p className="eyebrow">Live Match</p>
-          <p className="hero-status-heading">{currentTurnLabel}</p>
+          <h2 id="match-overview-title" className="hero-status-heading">
+            Match overview
+          </h2>
+          <p className="hero-status-callout">{currentTurnLabel}</p>
           <p className="hero-status-copy">
             Select one of the current player&apos;s pieces to reveal only legal destinations, then
             click a highlighted square to commit the move.
           </p>
-        </div>
+
+          <dl className="hero-metric-grid">
+            <div>
+              <dt>Current turn</dt>
+              <dd>{currentTurnLabel}</dd>
+            </div>
+            <div>
+              <dt>Selection focus</dt>
+              <dd>{selectedSummary}</dd>
+            </div>
+            <div>
+              <dt>Legal targets</dt>
+              <dd>
+                {selectedPosition ? formatCount(legalMoves.length, 'available move') : 'Select a piece'}
+              </dd>
+            </div>
+            <div>
+              <dt>Moves played</dt>
+              <dd>{formatCount(gameState.moveHistory.length, 'move')}</dd>
+            </div>
+          </dl>
+        </section>
       </header>
 
       <main className="layout">
@@ -232,11 +274,7 @@ export default function App({ initialState }: AppProps) {
         />
         <SidebarPanel
           currentTurnLabel={currentTurnLabel}
-          selectedSummary={
-            selectedPiece && selectedPosition
-              ? `${formatPieceLabel(selectedPiece)} at ${formatCellLabel(selectedPosition)}`
-              : 'No piece selected'
-          }
+          selectedSummary={selectedSummary}
           legalMoveCount={legalMoves.length}
           moveCount={gameState.moveHistory.length}
           statusMessage={statusMessage}

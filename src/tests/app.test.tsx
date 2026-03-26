@@ -41,6 +41,21 @@ function getCell(row: number, column: number): HTMLElement {
 }
 
 describe('App board interactions', () => {
+  it('renders the refined product overview and move-state guide', () => {
+    render(<App />);
+
+    expect(screen.getByRole('heading', { name: /long time/i, level: 1 })).toBeInTheDocument();
+    expect(screen.getByRole('list', { name: /product highlights/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /match overview/i, level: 2 })).toBeInTheDocument();
+    expect(screen.getByText(/selection focus/i)).toBeInTheDocument();
+
+    const moveStateGuide = screen.getByRole('list', { name: /move state guide/i });
+
+    expect(within(moveStateGuide).getByText(/^selected$/i)).toBeInTheDocument();
+    expect(within(moveStateGuide).getByText(/^legal$/i)).toBeInTheDocument();
+    expect(within(moveStateGuide).getByText(/^capture$/i)).toBeInTheDocument();
+  });
+
   it('highlights only legal destinations for the selected current-turn piece', () => {
     render(<App />);
 

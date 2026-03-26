@@ -33,6 +33,21 @@ const PIECE_NAMES: Record<PieceType, string> = {
   soldier: 'Soldier',
 };
 
+const MOVE_GUIDE_ITEMS = [
+  {
+    label: 'Selected',
+    className: 'board-guide-item__swatch--selected',
+  },
+  {
+    label: 'Legal',
+    className: 'board-guide-item__swatch--legal',
+  },
+  {
+    label: 'Capture',
+    className: 'board-guide-item__swatch--capture',
+  },
+];
+
 function getCellState(
   position: Position,
   selectedPosition: Position | null,
@@ -99,11 +114,23 @@ export function GameBoard({
       <div className="panel-heading board-panel-heading">
         <div>
           <p className="eyebrow">Playable Board</p>
-          <h2 id="board-title">Battle Board</h2>
+          <h2 id="board-title">Janggi board</h2>
         </div>
         <p className="board-caption">
           Current state: <span>{currentTurnLabel}</span>
         </p>
+      </div>
+
+      <div className="board-guide-row">
+        <p className="board-guide-copy">Blue opens at the top. Palace spaces carry a warmer tone.</p>
+        <ul className="board-guide-list" aria-label="Move state guide">
+          {MOVE_GUIDE_ITEMS.map((item) => (
+            <li key={item.label} className="board-guide-item">
+              <span className={`board-guide-item__swatch ${item.className}`} aria-hidden="true" />
+              <span>{item.label}</span>
+            </li>
+          ))}
+        </ul>
       </div>
 
       <div className="board-frame">

@@ -73,13 +73,13 @@ export function SidebarPanel({
   return (
     <aside className="panel sidebar-panel" aria-labelledby="sidebar-title">
       <div className="panel-heading">
-        <p className="eyebrow">Match State</p>
+        <p className="eyebrow">Match Center</p>
         <h2 id="sidebar-title" data-testid="turn-indicator">
           {currentTurnLabel}
         </h2>
         <p className="sidebar-copy">
-          Pass-and-play Janggi with immediate move feedback, board-side controls, and visible turn
-          flow.
+          Keep the current turn, board controls, and move feedback in one place while the board
+          stays uncluttered.
         </p>
       </div>
 
@@ -88,17 +88,17 @@ export function SidebarPanel({
       </div>
 
       <section className="sidebar-section" aria-labelledby="selection-title">
-        <h3 id="selection-title">Selection</h3>
-        <dl className="detail-list">
-          <div>
+        <h3 id="selection-title">Board snapshot</h3>
+        <dl className="detail-grid">
+          <div className="detail-card">
             <dt>Active piece</dt>
             <dd>{selectedSummary}</dd>
           </div>
-          <div>
+          <div className="detail-card">
             <dt>Legal targets</dt>
             <dd>{legalMoveCount}</dd>
           </div>
-          <div>
+          <div className="detail-card">
             <dt>Moves played</dt>
             <dd>{moveCount}</dd>
           </div>
@@ -128,7 +128,7 @@ export function SidebarPanel({
       </section>
 
       <section className="sidebar-section" aria-labelledby="legend-title">
-        <h3 id="legend-title">Board legend</h3>
+        <h3 id="legend-title">Board key</h3>
         <ul className="legend-list">
           {LEGEND_ITEMS.map((item) => (
             <li key={item.label}>
