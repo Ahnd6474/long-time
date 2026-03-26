@@ -3,11 +3,11 @@ const folders = ['game', 'state', 'components', 'styles', 'tests'];
 export function SidebarPanel() {
   return (
     <aside className="panel sidebar-panel" aria-labelledby="sidebar-title">
-      <p className="eyebrow">Structure</p>
-      <h2 id="sidebar-title">Project Ready For Gameplay</h2>
+      <p className="eyebrow">State</p>
+      <h2 id="sidebar-title">Rules Engine Ready</h2>
       <p className="sidebar-copy">
-        This step establishes the browser app shell, typed state boundaries, and test hooks
-        needed for the next Janggi implementation pass.
+        The repository now includes a standalone Janggi rules layer with typed game state,
+        legal move generation, validation, captures, turn flow, and undo-ready history.
       </p>
 
       <ul className="folder-list">
@@ -18,7 +18,7 @@ export function SidebarPanel() {
 
       <section className="info-block" aria-labelledby="next-steps-title">
         <h3 id="next-steps-title">Next gameplay slices</h3>
-        <p>Rules engine, legal move highlighting, local turn flow, and help UI.</p>
+        <p>Connect the engine to board interactions, legal move highlighting, and the help UI.</p>
       </section>
 
       <footer className="panel-footer">Built by Jakal Flow</footer>

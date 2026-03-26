@@ -12,7 +12,7 @@ export default function App() {
           <p className="eyebrow">Built by Jakal Flow</p>
           <h1>Long Time</h1>
           <p className="hero-copy">
-            A web-only React + TypeScript foundation for a polished Janggi experience.
+            A web-only React + TypeScript Janggi project with the core rules engine in place.
           </p>
         </div>
       </header>

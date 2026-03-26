@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import subprocess
+import sys
 from pathlib import Path
 
 
@@ -31,3 +33,17 @@ def test_source_layout_matches_bootstrap_scope() -> None:
 
     for path in expected_paths:
         assert path.exists(), f"Missing expected bootstrap path: {path}"
+
+
+def test_frontend_unit_suite_passes() -> None:
+    npm_command = "npm.cmd" if sys.platform.startswith("win") else "npm"
+    result = subprocess.run(
+        [npm_command, "test"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        timeout=180,
+        check=False,
+    )
+
+    assert result.returncode == 0, f"{result.stdout}\n{result.stderr}"
